@@ -1,9 +1,11 @@
-import Image from 'next/image'
+import LandingText from "@/components/LandingText";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-
+    <main className="flex justify-center">
+      <div className="mt-40">
+        <LandingText />
+      </div>
     </main>
-  )
+  );
 }
