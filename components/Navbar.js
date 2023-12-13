@@ -7,7 +7,7 @@ const Navbar = () => {
       <nav className="bg-gray-800 p-4">
         <div className="container mx-auto flex justify-between items-center">
           <Link href={"/"}>
-            <div className="text-white font-bold text-xl">PriceTrack</div>
+            <div className="text-white font-bold text-3xl ml-5">PriceTrack</div>
           </Link>
           <div className="space-x-4">
             <Link href={"/products"} className="text-white">
@@ -16,12 +16,12 @@ const Navbar = () => {
             <Link href={"/profile"} className="text-white">
               Profile
             </Link>
-            <Link href={"/login"}>
-              <button className="btn">Sign In</button>
-            </Link>
             <button className="text-white ml-4 focus:outline-none">
               Theme
             </button>
+            <Link href={"/login"}>
+              <button className="btn">Sign In</button>
+            </Link>
           </div>
         </div>
       </nav>
