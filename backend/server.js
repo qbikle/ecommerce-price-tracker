@@ -9,8 +9,10 @@ const cors = require('cors');
 app.use(cors());
 
 const authRoute = require('./routes/authRoute');
+const productRoute = require('./routes/productRoute');
 app.use(express.json());
 app.use('/auth', authRoute);
+app.use('/product', productRoute);
 
 app.listen(3000, () => {
     console.log('server is listening on port 3000');
