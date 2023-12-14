@@ -1,36 +1,30 @@
 "use client";
 import Link from "next/link";
 import React from "react";
-import { useState } from "react";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [login, setLogin] = React.useState({
+    email: "",
+    password: "",
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, password);
+    const loginData = {
+      email: login.email,
+      password: login.password,
+    };
     try {
       const res = await fetch("/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        body: JSON.stringify({ loginData }),
       });
-
-      if (!res.ok) {
-        console.error(`Error: ${res.status}`);
-        // Handle error appropriately
-        return;
-      }
 
       const data = await res.json();
       console.log(data);
-      // Handle the response data as needed
     } catch (error) {
       console.log("Fetch error:", error);
       // Handle fetch error
@@ -54,7 +48,7 @@ const Login = () => {
               placeholder="Enter your email"
               className="input input-bordered input-secondary w-full max-w-xs"
               onChange={(e) => setEmail(e.target.value)}
-              value={email}
+              value={login.email}
             />
           </div>
           <div className="mb-4">
@@ -69,7 +63,7 @@ const Login = () => {
               placeholder="Enter your password"
               className="input input-bordered input-secondary w-full max-w-xs"
               onChange={(e) => setPassword(e.target.value)}
-              value={password}
+              value={login.password}
             />
           </div>
           <div className="mb-4">

@@ -1,12 +1,52 @@
+"use client";
 import Link from "next/link";
 import React from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const SignUp = () => {
+  const router = useRouter();
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleClick = () => setShowPassword(!showPassword);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const [signup, setSignup] = React.useState({
+    name: "",
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+
+    const signupData = {
+      name: signup.name,
+      username: signup.username,
+      email: signup.email,
+      password: signup.password,
+    };
+
+    try {
+      const res = await axios.post("/api/signup", signupData);
+      const data = await res.data;
+      console.log(data);
+      if (data.success) {
+        router.push("/products");
+      }
+    } catch (error) {
+      console.log("Error Check Response!");
+    }
+  };
+
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div className="p-8 shadow-md rounded-md w-full sm:w-96 bg-primary bg-opacity-5">
         <h2 className="text-3xl font-semibold mb-4 text-slate-200">Sign Up</h2>
-        <form>
+        <form onSubmit={handleSignUp}>
           <div className="mb-4">
             <label
               htmlFor="name"
@@ -18,6 +58,8 @@ const SignUp = () => {
               type="text"
               placeholder="Enter your name"
               className="input input-bordered input-secondary w-full max-w-xs"
+              value={signup.name}
+              onChange={(e) => setSignup({ ...signup, name: e.target.value })}
             />
           </div>
           <div className="mb-4">
@@ -31,6 +73,10 @@ const SignUp = () => {
               type="text"
               placeholder="Enter your username"
               className="input input-bordered input-secondary w-full max-w-xs"
+              value={signup.username}
+              onChange={(e) =>
+                setSignup({ ...signup, username: e.target.value })
+              }
             />
           </div>
           <div className="mb-4">
@@ -44,6 +90,8 @@ const SignUp = () => {
               type="text"
               placeholder="Enter your email"
               className="input input-bordered input-secondary w-full max-w-xs"
+              value={signup.email}
+              onChange={(e) => setSignup({ ...signup, email: e.target.value })}
             />
           </div>
           <div className="mb-4">
@@ -57,6 +105,10 @@ const SignUp = () => {
               type="password"
               placeholder="Enter your password"
               className="input input-bordered input-secondary w-full max-w-xs"
+              value={signup.password}
+              onChange={(e) =>
+                setSignup({ ...signup, password: e.target.value })
+              }
             />
           </div>
           <div className="mb-4">
