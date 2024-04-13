@@ -117,21 +117,22 @@ export async function POST(req) {
     if (!query) {
       return NextResponse.json({ error: "Query not provided" });
     }
-    const proxyCheckResult = await checkBrightDataProxy();
-    if (!proxyCheckResult) {
-      console.error("Bright Data proxy check failed. Aborting.");
-      const response = NextResponse.json({
-        error: "Bright Data proxy check failed",
-      });
-      return response;
-    }
-    const amazonProducts = await searchAmazon(query);
-    const flipkartProducts = await searchFlipkart(query);
+    // Check Bright Data proxy
+    // const proxyCheckResult = await checkBrightDataProxy();
+    // if (!proxyCheckResult) {
+    //   console.error("Bright Data proxy check failed. Aborting.");
+    //   const response = NextResponse.json({
+    //     error: "Bright Data proxy check failed",
+    //   });
+    //   return response;
+    // }
+    // const amazonProducts = await searchAmazon(query);
+    // const flipkartProducts = await searchFlipkart(query);
 
-    // const [amazonProducts, flipkartProducts] = await Promise.all([
-    //   searchAmazon(query),
-    //   searchFlipkart(query),
-    // ]);
+    const [amazonProducts, flipkartProducts] = await Promise.all([
+      searchAmazon(query),
+      searchFlipkart(query),
+    ]);
 
     return NextResponse.json({ amazonProducts, flipkartProducts });
   } catch (err) {

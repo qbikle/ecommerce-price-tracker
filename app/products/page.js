@@ -1,28 +1,88 @@
+"use client";
 import ProductCard from "@/components/ProductCard";
-
-const products = [
-  { id: 1, name: "Product 1", description: "Description 1" },
-  { id: 2, name: "Product 2", description: "Description 2" },
-  { id: 3, name: "Product 3", description: "Description 3" },
-  { id: 4, name: "Product 3", description: "Description 3" },
-  { id: 5, name: "Product 3", description: "Description 3" },
-  { id: 6, name: "Product 3", description: "Description 3" },
-];
+import Navbar from "@/components/Navbar";
+import { useState } from "react";
+import axios from "axios";
+import React from "react";
 
 const ProductsPage = () => {
+  const [prod, setProd] = React.useState({
+    query: "",
+  });
+  const [products, setProducts] = useState([]);
+  const [amazonProducts, setAmazonProducts] = useState([]);
+  const [flipkartProducts, setFlipkartProducts] = useState([]);
+  const fetchProducts = async () => {
+    if (!prod.query) return;
+    const res = await axios.post("/api/products/querysearch", prod);
+    setProducts(res.data);
+    setAmazonProducts(res.data.amazonProducts);
+    setFlipkartProducts(res.data.flipkartProducts);
+  };
+
   return (
-    <div className="container mx-auto my-8">
-      <div className="flex flex-wrap justify-center -mx-4">
-        {products.map((product) => (
+    <>
+      <Navbar />
+      <div className="container mx-auto my-8">
+        <div className="flex justify-center">
+          <label className="input input-bordered flex items-center gap-2">
+            <input
+              type="text"
+              className="grow"
+              placeholder="Search"
+              onChange={(e) => setProd({ ...prod, query: e.target.value })}
+            />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16"
+              fill="currentColor"
+              className="w-4 h-4 opacity-70"
+            >
+              <path
+                fillRule="evenodd"
+                d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </label>
+          <button className="btn mx-4" onClick={fetchProducts}>
+            Search
+          </button>
+        </div>
+        <div className="bg-slate-900 rounded-lg px-10 my-10">
+          <h2>Amazon Products</h2>
           <div
-            key={product.id}
-            className="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3 px-4 mb-8"
+            id="amazonProducts"
+            className="flex flex-wrap justify-center -mx-4"
           >
-            <ProductCard product={product} />
+            {amazonProducts
+              .slice(0, 9)
+              .map(
+                (product, index) => (
+                  console.log(product),
+                  (<ProductCard key={index} product={product} />)
+                )
+              )}
           </div>
-        ))}
+        </div>
+        <div className="bg-slate-900 rounded-lg px-10 my-10">
+          <h2>Flipkart Products</h2>
+          <div
+            id="flipkartProducts"
+            className="flex flex-wrap justify-center -mx-4"
+          >
+            {flipkartProducts
+              .slice(0, 9)
+              .map(
+                (product, index) => (
+                  console.log(product),
+                  (<ProductCard key={index} product={product} />)
+                )
+              )}
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

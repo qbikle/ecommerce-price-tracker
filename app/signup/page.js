@@ -34,7 +34,10 @@ const SignUp = () => {
       const res = await axios.post("/api/signup", signupData);
       const data = await res.data;
       if (data.success) {
-        router.push("/products");
+        document.getElementById("verified-box").showModal();
+        setTimeout(() => {
+          window.location.href = "/products";
+        }, 2000);
       }
     } catch (error) {
       console.log("Error Check Response!");
@@ -123,6 +126,19 @@ const SignUp = () => {
             </Link>
           </div>
         </form>
+        <dialog
+          id="verified-box"
+          className="modal modal-bottom sm:modal-middle"
+        >
+          <div className="modal-box">
+            <h3 className="font-bold text-lg ml-10">Sign Up Successful!</h3>
+            <div className="flex justify-center">
+              <p className="py-4">Redirecting you to products page</p>
+              <span className="loading loading-dots loading-sm ml-3"></span>
+            </div>
+            <div className="modal-action"></div>
+          </div>
+        </dialog>
       </div>
     </div>
   );

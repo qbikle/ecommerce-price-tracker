@@ -1,8 +1,11 @@
 "use client";
 import Link from "next/link";
 import React from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
   const [login, setLogin] = React.useState({
     email: "",
     password: "",
@@ -14,20 +17,21 @@ const Login = () => {
       email: login.email,
       password: login.password,
     };
-    try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ loginData }),
-      });
 
-      const data = await res.json();
-      console.log(data);
+    try {
+      const res = await axios.post("/api/login", loginData);
+      const data = await res.data;
+      if (data.success) {
+        document.getElementById("verified-box").showModal();
+        setTimeout(() => {
+          window.location.href = "/products";
+        }, 2000);
+      } else {
+        console.log(data);
+        document.getElementById("my_modal_2").showModal();
+      }
     } catch (error) {
       console.log("Fetch error:", error);
-      // Handle fetch error
     }
   };
 
@@ -47,7 +51,7 @@ const Login = () => {
               type="text"
               placeholder="Enter your email"
               className="input input-bordered input-secondary w-full max-w-xs"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setLogin({ ...login, email: e.target.value })}
               value={login.email}
             />
           </div>
@@ -62,7 +66,7 @@ const Login = () => {
               type="password"
               placeholder="Enter your password"
               className="input input-bordered input-secondary w-full max-w-xs"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setLogin({ ...login, password: e.target.value })}
               value={login.password}
             />
           </div>
@@ -79,6 +83,28 @@ const Login = () => {
             </Link>
           </div>
         </form>
+        <dialog id="my_modal_2" className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">Wrong Password or E-mail!</h3>
+            <p className="py-4">Please enter correct E-mail and password</p>
+          </div>
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+          </form>
+          <dialog
+            id="verified-box"
+            className="modal modal-bottom sm:modal-middle"
+          >
+            <div className="modal-box">
+              <h3 className="font-bold text-lg ml-10">Login Successful!</h3>
+              <div className="flex justify-center">
+                <p className="py-4">Redirecting you to products page</p>
+                <span className="loading loading-dots loading-sm ml-3"></span>
+              </div>
+              <div className="modal-action"></div>
+            </div>
+          </dialog>
+        </dialog>
       </div>
     </div>
   );
