@@ -5,11 +5,11 @@ const jwt = require("jsonwebtoken");
 // Handle Login request
 export async function POST(request) {
   try {
-    const { email, password } = await request.body.json();
+    const { email, password } = await request.json();
     const user = await User.findByCredentials(email, password);
     // Create Auth token for user
     const tokenData = {
-      _id: user._id,
+      id: user._id,
       username: user.username,
       email: user.email,
     };
@@ -28,6 +28,6 @@ export async function POST(request) {
 
     return response;
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return NextResponse.json({ error: error.message, success: false });
   }
 }

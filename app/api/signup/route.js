@@ -22,7 +22,7 @@ export async function POST(request) {
     await newUser.save();
     const userData = await User.findByCredentials(email, password);
     const tokenData = {
-      _id: userData._id,
+      id: userData._id,
       username: userData.username,
       email: userData.email,
     };

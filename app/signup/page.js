@@ -33,7 +33,6 @@ const SignUp = () => {
     try {
       const res = await axios.post("/api/signup", signupData);
       const data = await res.data;
-      console.log(data);
       if (data.success) {
         router.push("/products");
       }
